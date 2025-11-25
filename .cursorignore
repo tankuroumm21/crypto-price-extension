@@ -1,0 +1,30 @@
+# 必須の除外項目
+node_modules/  # 依存ライブラリ（最も重い）
+build/         # ビルド成果物（AIに見せる必要なし）
+dist/          # 配布用フォルダ（AIに見せる必要なし）
+.env
+.DS_Store
+
+# Chrome拡張機能特有の不要ファイル
+*.zip
+.vscode/
+
+# 巨大になりがちなアセット（画像やフォント）
+# AIがコードを理解するのに不要なため、除外を強く推奨します。
+icons/         # アイコンフォルダ全体
+images/        # 画像フォルダ全体
+assets/        # アセットフォルダ全体
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.svg
+*.woff
+*.ttf
+*.otf
+
+# ログやキャッシュ
+*.log
+.cache/
+temp/
+tmp/
