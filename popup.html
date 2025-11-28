@@ -4,56 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Crypto Price Tracker</title>
-  <link rel="stylesheet" href="popup.css">
 </head>
 <body>
-  <div class="container">
-    <header>
-      <h1>Crypto Tracker</h1>
-    </header>
-    <main>
-      <div class="search-box">
-        <input type="text" id="symbol-input" placeholder="シンボルを入力 (例: BTC)" autocomplete="off">
-        <button id="search-btn">検索</button>
-      </div>
-      <div id="result-area" class="result-area hidden">
-        <div class="coin-header">
-          <img id="coin-image" src="" alt="" class="hidden">
-          <h2 id="coin-name"></h2>
-          <span id="coin-symbol"></span>
-        </div>
-        <div class="price-container">
-          <div class="price-item">
-            <span class="currency">JPY</span>
-            <span class="value" id="price-jpy">---</span>
-          </div>
-          <div class="price-item">
-            <span class="currency">USD</span>
-            <span class="value" id="price-usd">---</span>
-          </div>
-        </div>
-        <div class="changes-container">
-          <div class="change-item">
-            <span class="label">24H</span>
-            <span class="value" id="change-24h">---</span>
-          </div>
-          <div class="change-item">
-            <span class="label">7D</span>
-            <span class="value" id="change-7d">---</span>
-          </div>
-          <div class="change-item">
-            <span class="label">1M</span>
-            <span class="value" id="change-30d">---</span>
-          </div>
-        </div>
-      </div>
-      <div id="error-message" class="error-message hidden"></div>
-      <div id="loading" class="loading hidden">
-        <div class="spinner"></div>
-      </div>
-    </main>
-  </div>
-  <script src="node_modules/axios/dist/axios.min.js"></script>
-  <script src="popup.js"></script>
+  <div id="root"></div>
+  <script type="module" src="src/main.tsx"></script>
 </body>
 </html>
