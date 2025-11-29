@@ -3,6 +3,7 @@ import { Dialog, DialogContent, DialogOverlay } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { TrendingUp, TrendingDown } from "lucide-react";
 import axios from "axios";
+import { cn } from "@/lib/utils"; // 共通ユーティリティをインポート
 
 interface PriceData {
   symbol: string;
@@ -20,14 +21,14 @@ const PriceChange = ({ percentage, label }: { percentage: number; label: string 
   const bgClass = isPositive ? "bg-positive/10" : "bg-destructive/10";
 
   return (
-    <div className={`flex flex-col items-center p-1 rounded-md ${bgClass} transition-all hover:scale-105`}>
+    <div className={cn("flex flex-col items-center p-1 rounded-md transition-all hover:scale-105", bgClass)}>
       <div className="flex items-center gap-1 mb-0">
         {isPositive ? (
           <TrendingUp className="w-3 h-3" />
         ) : (
           <TrendingDown className="w-3 h-3" />
         )}
-        <span className={`text-sm font-bold ${colorClass}`}>
+        <span className={cn("text-sm font-bold", colorClass)}>
           {isPositive ? "+" : ""}{percentage.toFixed(2)}%
         </span>
       </div>
@@ -61,9 +62,11 @@ export const CryptoPriceChecker = () => {
       }
 
       const exactMatch = coins.find((c: any) => c.symbol.toLowerCase() === query.toLowerCase());
-      const coinId = exactMatch ? exactMatch.id : coins[0].id;
-      const coinNameText = exactMatch ? exactMatch.name : coins[0].name;
-      const coinSymbolText = exactMatch ? exactMatch.symbol : coins[0].symbol;
+      // 厳密一致を優先し、見つからなければ最初の結果を使用するようにロジックを統合
+      const targetCoin = exactMatch || coins[0];
+      const coinId = targetCoin.id;
+      const coinNameText = targetCoin.name;
+      const coinSymbolText = targetCoin.symbol;
 
       const detailsUrl = `https://api.coingecko.com/api/v3/coins/${coinId}?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false`;
       const detailsResponse = await axios.get(detailsUrl);
@@ -84,7 +87,8 @@ export const CryptoPriceChecker = () => {
       };
 
       setData(priceData);
-      setDialogSymbol(query.toUpperCase());
+      // ダイアログが開かれたときの再検索フォームを空にする
+      setDialogSymbol("");
     } catch (err: any) {
       setError(err.message || "エラーが発生しました。");
     } finally {
@@ -138,13 +142,14 @@ export const CryptoPriceChecker = () => {
             {data && (
               <div className="flex flex-col gap-2 items-center">
 
-                <div className="text-2xl font-bold text-primary">{data.symbol}</div>
-
-                <div className="text-sm text-foreground">{data.name}</div>
+                <div className="text-2xl font-bold text-primary flex items-baseline gap-1">
+                  <span>{data.symbol}</span>
+                  <span className="text-sm text-muted-foreground font-normal">({data.name})</span>
+                </div>
 
                 {/* 価格 */}
                 <div className="w-full border-y py-2 space-y-1">
-                  <div className="flex justify-center gap-2 text-lg font-semibold">
+                  <div className="flex justify-center gap-2 text-base">
                     <span className="text-xs text-muted-foreground">USD</span>
                     ${data.usdPrice.toLocaleString()}
                   </div>
@@ -169,7 +174,7 @@ export const CryptoPriceChecker = () => {
                       type="text"
                       value={dialogSymbol}
                       onChange={(e) => setDialogSymbol(e.target.value.toUpperCase())}
-                      className="flex-1 px-2 py-1 border-2 border-primary rounded-md text-sm"
+                      className="flex-1 px-2 py-1 border-2 border-primary rounded-md text-sm text-blue-700"
                     />
                     <Button size="sm" className="h-[32px]" onClick={() => fetchPriceData(dialogSymbol)}>
                       検索
