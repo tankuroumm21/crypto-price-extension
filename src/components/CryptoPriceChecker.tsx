@@ -106,6 +106,9 @@ export const CryptoPriceChecker = () => {
           placeholder="シンボルを入力 (例: BTC)"
           className="flex-1 px-3 py-2 rounded-md border border-input bg-background text-foreground"
           onKeyPress={(e) => e.key === "Enter" && symbol.trim() && fetchPriceData(symbol)}
+          autoFocus={true} // ポップアップ起動時に自動フォーカス
+          lang="en" // IME/言語ヒント
+          style={{ imeMode: 'disabled' }} // 非推奨だがIME無効化を試みる
         />
         <Button onClick={() => fetchPriceData(symbol)} disabled={loading || !symbol.trim()}>
           {loading ? "..." : "検索"}
